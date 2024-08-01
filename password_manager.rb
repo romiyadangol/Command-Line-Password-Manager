@@ -30,7 +30,24 @@ class PasswordManager
     def username(service)
         if @passwords.key?(service)
             @passwords[service][:username]
+        else
+            "Service Not Found"
+        end
 
+    end
+
+    #generate random password
+    def generate_password
+        SecureRandom.hex(10)
+    end
+
+    #list services
+    def list_services
+        if @passwords.empty?
+            "No service Found"
+        else
+            @passwords.key.join(", ")
+        end
     end
 
     private
@@ -44,16 +61,19 @@ class PasswordManager
         BCrypt::Password.new(encrypt_password)
     end
 
-    def load_password
-
-    end
-
     def save_passwords
-
+        File.open("passwords.txt", "w") do |file|
+            file.write(@passwords)
+        end
     end
 
-
-
+    def load_password
+        if File.exist?("passwords.txt")
+            File.open("passwords.txt", "r") do |file|
+                @passwords = eval(file.read)
+            end
+        end
+    end
 end
 
 
@@ -96,6 +116,17 @@ loop do
         puts "Username: #{password_manager.get_username(service)}"
         puts "Password: #{password_manager.get_password(service)}"
 
+    when 3
+        puts "Generate password: #{password_manager.generate_password}"
+
+    when 4
+        puts password_manager.list_services
+        
+    when 5
+        break
+
+    else
+        "Invalid Choice..."
     end
 end
 
