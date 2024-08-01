@@ -10,8 +10,8 @@ class PasswordManager
     #add password
     def add_password(service, username, password)
         @passwords[service] = {
-            username = username,
-            password = encrypt_password(password)
+            username: username,
+            password: encrypt_password(password)
         }
         save_passwords
     end
@@ -27,7 +27,7 @@ class PasswordManager
     end
 
     #get username
-    def username(service)
+    def get_username(service)
         if @passwords.key?(service)
             @passwords[service][:username]
         else
@@ -43,11 +43,7 @@ class PasswordManager
 
     #list services
     def list_services
-        if @passwords.empty?
-            "No service Found"
-        else
-            @passwords.key.join(", ")
-        end
+        @passwords.keys.join(", ")
     end
 
     private
@@ -100,14 +96,12 @@ loop do
     when 1
         puts "Enter Service"
         service = gets.chomp
-
         puts "Enter Username"
         username = gets.chomp
-
         puts "Enter Password"
         password = gets.chomp
-
         password_manager.add_password(service, username, password)
+        puts"Password Added Successfully"
 
     when 2
         puts "Enter Service"
